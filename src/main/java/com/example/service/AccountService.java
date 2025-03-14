@@ -25,4 +25,17 @@ public class AccountService {
         Account savedAccount = accountRepository.save(account);
         return ResponseEntity.status(HttpStatus.OK).body(savedAccount);
     }
+
+    public ResponseEntity<Account> login(Account account) {
+        String username = account.getUsername();
+        String password = account.getPassword();
+
+        Account authenicate = accountRepository.findByUsernameAndPassword(username, password);
+        if (authenicate == null) {
+            return ResponseEntity.status(401).body(null);
+        }
+
+        return ResponseEntity.ok(authenicate);
+    }
+
 }
