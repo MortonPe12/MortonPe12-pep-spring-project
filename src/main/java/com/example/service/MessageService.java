@@ -10,6 +10,8 @@ import com.example.entity.Account;
 import com.example.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MessageService {
     @Autowired
@@ -28,5 +30,16 @@ public class MessageService {
 
         Message savedMessage = messageRepository.save(message);
         return ResponseEntity.status(HttpStatus.OK).body(savedMessage);
+    }
+
+    public ResponseEntity<List<Message>> getAllMessage(){
+        List<Message> allMessages = messageRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(allMessages);
+    }
+
+    public ResponseEntity<Message> getMessageById(Integer messageId){
+        Message message = messageRepository.findByMessageId(messageId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 }
