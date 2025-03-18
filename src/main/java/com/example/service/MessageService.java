@@ -42,4 +42,29 @@ public class MessageService {
 
         return ResponseEntity.status(HttpStatus.OK).body(message);
     }
+
+    public ResponseEntity<Integer> deleteMessage(Integer messageId){
+        if (messageRepository.existsById(messageId)){
+            messageRepository.deleteById(messageId);
+            return ResponseEntity.status(HttpStatus.OK).body(1);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    public ResponseEntity<Integer> updateMessage(Integer messageId, Message messageImport){
+        if (messageRepository.existsById(messageId) && messageImport.getMessageText().isBlank() == false && 
+        messageImport.getMessageText().length() <= 255){
+            Message message = messageRepository.findByMessageId(messageId);
+            message.setMessageText(messageImport.getMessageText());
+            messageRepository.save(message);
+            return ResponseEntity.status(HttpStatus.OK).body(1);
+                
+        }
+        return ResponseEntity.status(400).body(null);
+    }
+
+    public ResponseEntity<List<Message>> getAllMessagesByUserId(Integer accountId){
+        List<Message> allMessages = messageRepository.findByPostedBy(accountId);
+        return ResponseEntity.status(HttpStatus.OK).body(allMessages);
+    }
 }
